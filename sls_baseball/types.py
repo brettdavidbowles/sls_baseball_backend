@@ -18,7 +18,6 @@ class Player:
 
 @strawberry.django.type(models.PlayerAttribute)
 class PlayerAttribute:
-    player: 'Player'
     composure: auto
     endurance: auto
     intellect: auto

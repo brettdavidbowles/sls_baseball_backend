@@ -15,7 +15,7 @@ class Player(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 class PlayerAttribute(models.Model):
-    player = models.OneToOneField(Player, on_delete=models.CASCADE, primary_key=True,)
+    player = models.OneToOneField(Player, on_delete=models.CASCADE, primary_key=True)
     composure = models.IntegerField()
     endurance = models.IntegerField()
     intellect = models.IntegerField()
@@ -25,7 +25,7 @@ class PlayerAttribute(models.Model):
     willpower = models.IntegerField()
 
     def __str__(self):
-        return f"{self.player.first_name} {self.player.last_name} Atributes"
+        return f"{self.player.first_name} {self.player.last_name} Attributes"
 
 class Team(models.Model):
     name = models.CharField(max_length=50)

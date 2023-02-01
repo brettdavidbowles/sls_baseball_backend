@@ -5,7 +5,6 @@ from .models import User, Player, PlayerAttribute, Team, League, Manager, Season
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Player)
-admin.site.register(PlayerAttribute)
 admin.site.register(Team)
 admin.site.register(League)
 admin.site.register(Manager)
@@ -16,3 +15,4 @@ admin.site.register(LineupPlayer)
 admin.site.register(AtBat)
 admin.site.register(LeftOnRunner)
 admin.site.register(ScheduledGame)
+admin.site.register(PlayerAttribute)

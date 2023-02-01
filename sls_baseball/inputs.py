@@ -8,7 +8,7 @@ class PlayerInput:
     last_name: auto
     attributes: 'PlayerAttributeInput'
 
-@strawberry.django.input(models.PlayerAttribute)
+@strawberry.django.input(models.PlayerAttribute, partial=True)
 class PlayerAttributeInput:
     composure: auto
     endurance: auto
@@ -17,3 +17,7 @@ class PlayerAttributeInput:
     speed: auto
     strength: auto
     willpower: auto
+
+@strawberry.django.input(models.League)
+class LeagueInput:
+    name: auto
