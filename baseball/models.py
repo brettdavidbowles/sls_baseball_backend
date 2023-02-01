@@ -7,8 +7,8 @@ class User(AbstractUser):
 class Player(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    team = models.ForeignKey("Team", on_delete=models.SET_NULL, related_name="players", null=True)
-    at_bats = models.ManyToManyField("AtBat", related_name="players")
+    team = models.ForeignKey("Team", on_delete=models.SET_NULL, related_name="players", blank=True, null=True)
+    at_bats = models.ManyToManyField("AtBat", related_name="players", blank=True)
     # age = models.IntegerField()
 
     def __str__(self):
@@ -29,8 +29,8 @@ class PlayerAttribute(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
-    stadium = models.CharField(max_length=50)
+    location = models.CharField(max_length=50, null=True)
+    stadium = models.CharField(max_length=50, null=True)
     league = models.ForeignKey("League", on_delete=models.SET_NULL, related_name="teams", null=True)
     games = models.ManyToManyField("Game")
 
@@ -66,7 +66,8 @@ class Game(models.Model):
     date = models.DateTimeField()
     league = models.ForeignKey("League", on_delete=models.RESTRICT, related_name="games")
     season = models.ForeignKey("Season", on_delete=models.RESTRICT, related_name="games")
-    teams = models.ManyToManyField("Team")
+    home_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="home_games")
+    away_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="away_games")
 
     def __str__(self):
         return f"Game {self.id} on {self.date}"
@@ -95,17 +96,16 @@ class AtBat(models.Model):
     balls = models.IntegerField()
     rbis = models.IntegerField()
     outcome = models.CharField(max_length=50)
-    runners_left_on = models.ManyToManyField("RunnersLeftOn")
 
     def __str__(self):
         return f"{self.id} at bat in Game {self.lineup.game.id}"
 
-class RunnersLeftOn(models.Model):
+class LeftOnRunner(models.Model):
     default_runner = {
       "first_name": "default",
       "last_name": "runner",
     }
-    at_bat = models.ManyToManyField("AtBat")
+    at_bat = models.ForeignKey("AtBat", on_delete=models.RESTRICT)
     player = models.ForeignKey("Player", default=default_runner, on_delete=models.SET_DEFAULT)
     base = models.IntegerField()
     at_bat_subindex = models.IntegerField(default=1) # this is if an at bat has stolen bases, thus multiple scenarios. i hate the name and hate that i need this comment but i'm drawing a blank
@@ -113,3 +113,12 @@ class RunnersLeftOn(models.Model):
 
     def __str__(self):
         return f"{self.player.first_name} {self.player.last_name} left on base {self.base}"
+
+class ScheduledGame(models.Model):
+    date = models.DateTimeField()
+    home_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="home_scheduled_games")
+    away_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="away_scheduled_games")
+    leauge = models.ForeignKey("League", on_delete=models.SET_NULL, related_name="scheduled_games", null=True)
+
+    def __str__(self):
+        return f"Game on {self.scheduled_date}: {self.away_team} at {self.home_team}"
