@@ -14,7 +14,9 @@ class Player:
     last_name: auto
     team: 'Team'
     at_bats: List['AtBat']
-    attributes: 'PlayerAttribute'
+    @strawberry.django.field
+    def attributes(self, info) -> 'PlayerAttribute':
+        return models.PlayerAttribute.objects.get(player__id=self.id)
 
 @strawberry.django.type(models.PlayerAttribute)
 class PlayerAttribute:

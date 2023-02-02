@@ -4,6 +4,7 @@ from baseball import models
 from .types import Player, League, PlayerAttribute
 from .inputs import PlayerInput, LeagueInput
 from strawberry_django import mutations
+from itertools import islice
 
 @strawberry.type
 class Query:
@@ -27,8 +28,32 @@ class Mutation:
         )
         return player
     
-    # @strawberry.mutation
-    # def createPlayers(self, info, input: List[PlayerInput]) -> List[Player]:
+    @strawberry.mutation
+    def createPlayers(self, info, input: List[PlayerInput]) -> List[Player]:
+        batch_size = 500
+        players = [models.Player(first_name=player.first_name, last_name=player.last_name) for player in input]
+        full_length = len(players)
+        players_list = list(players)
+        attributes = [models.PlayerAttribute(
+            player=players_list[index],
+            composure=player.attributes.composure,
+            endurance=player.attributes.endurance,
+            intellect=player.attributes.intellect,
+            reflexes=player.attributes.reflexes,
+            speed=player.attributes.speed,
+            strength=player.attributes.strength,
+            willpower=player.attributes.willpower,
+        ) for index, player in enumerate(input)]
 
+        number_created = 0
+        while number_created < full_length:
+            players_batch = list(islice(players, number_created, number_created + batch_size))
+            attributes_batch = list(islice(attributes, number_created, number_created + batch_size))
+            if not players_batch:
+                break
+            models.Player.objects.bulk_create(players_batch, batch_size)
+            models.PlayerAttribute.objects.bulk_create(attributes_batch, batch_size)
+            number_created += batch_size
+        return players
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
