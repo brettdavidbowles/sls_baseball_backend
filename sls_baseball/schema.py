@@ -15,7 +15,7 @@ class Mutation:
     createLeague: League = mutations.create(LeagueInput)
     @strawberry.mutation
     def createPlayer(self, info, input: PlayerInput) -> Player:
-        player = models.Player.objects.create(first_name=input.first_name, last_name=input.last_name)
+        player = models.Player.objects.create(first_name=input.first_name, last_name=input.last_name, team=models.Team.objects.get(name=input.team))
         attribute = models.PlayerAttribute.objects.create(
             player=player,
             composure=input.attributes.composure,
@@ -31,7 +31,7 @@ class Mutation:
     @strawberry.mutation
     def createPlayers(self, info, input: List[PlayerInput]) -> List[Player]:
         batch_size = 500
-        players = [models.Player(first_name=player.first_name, last_name=player.last_name) for player in input]
+        players = [models.Player(first_name=player.first_name, last_name=player.last_name, team=models.Team.objects.get(name=player.team)) for player in input]
         full_length = len(players)
         players_list = list(players)
         attributes = [models.PlayerAttribute(

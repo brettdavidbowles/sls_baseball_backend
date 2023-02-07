@@ -6,7 +6,7 @@ from strawberry import auto
 class PlayerInput:
     first_name: auto
     last_name: auto
-    # team: auto
+    team: str
     attributes: 'PlayerAttributeInput'
 
 @strawberry.django.input(models.PlayerAttribute, partial=True)

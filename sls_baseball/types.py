@@ -91,9 +91,9 @@ class LeftOnRunner:
     base: auto
     at_bat_subindex: auto
 
-@strawberry.django.type(models.ScheduledGame)
-class ScheduledGame:
-    date: auto
-    home_team: Team
-    away_team: Team
-    leauge: League
+# @strawberry.django.type(models.ScheduledGame)
+# class ScheduledGame:
+#     date: auto
+#     home_team: Team
+#     away_team: Team
+#     leauge: League
