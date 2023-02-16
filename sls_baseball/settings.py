@@ -84,19 +84,19 @@ WSGI_APPLICATION = 'sls_baseball.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-if 'RDS_DB_NAME' in environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': environ['RDS_DB_NAME'],
-            'USER': environ['RDS_USERNAME'],
-            'PASSWORD': environ['RDS_PASSWORD'],
-            'HOST': environ['RDS_HOSTNAME'],
-            'PORT': environ['RDS_PORT'],
-        }
-    }
-else:
-    DATABASES = {
+# if 'RDS_DB_NAME' in environ:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#             'NAME': environ['RDS_DB_NAME'],
+#             'USER': environ['RDS_USERNAME'],
+#             'PASSWORD': environ['RDS_PASSWORD'],
+#             'HOST': environ['RDS_HOSTNAME'],
+#             'PORT': environ['RDS_PORT'],
+#         }
+#     }
+# else:
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env("DATABASE_NAME"),
@@ -105,7 +105,7 @@ else:
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
     }
-    }
+}
 
 
 # Password validation
