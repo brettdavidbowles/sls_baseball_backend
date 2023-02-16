@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+from os import environ
 
 env = environ.Env()
 environ.Env.read_env()
@@ -29,9 +29,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
-]
+# ALLOWED_HOSTS = [
+#     'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
+# ]
+ALLOWED_HOSTS = ['18.188.62.39']
 
 
 # Application definition
@@ -83,7 +84,19 @@ WSGI_APPLICATION = 'sls_baseball.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+if 'RDS_DB_NAME' in environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': environ['RDS_DB_NAME'],
+            'USER': environ['RDS_USERNAME'],
+            'PASSWORD': environ['RDS_PASSWORD'],
+            'HOST': environ['RDS_HOSTNAME'],
+            'PORT': environ['RDS_PORT'],
+        }
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': env("DATABASE_NAME"),
@@ -92,7 +105,7 @@ DATABASES = {
         'HOST': env("DATABASE_HOST"),
         'PORT': env("DATABASE_PORT"),
     }
-}
+    }
 
 
 # Password validation
