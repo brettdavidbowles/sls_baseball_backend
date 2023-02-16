@@ -32,7 +32,7 @@ DEBUG = True
 # ALLOWED_HOSTS = [
 #     'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
 # ]
-ALLOWED_HOSTS = ['18.188.62.39']
+ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com']
 
 
 # Application definition
