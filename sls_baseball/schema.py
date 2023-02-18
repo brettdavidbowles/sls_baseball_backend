@@ -9,6 +9,7 @@ from itertools import islice
 @strawberry.type
 class Query:
     players: List[Player] = strawberry.django.field()
+    leagues: List[League] = strawberry.django.field()
 
 @strawberry.type
 class Mutation:
