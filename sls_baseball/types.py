@@ -38,6 +38,7 @@ class Team:
 
 @strawberry.django.type(models.League)
 class League:
+    id: auto
     name: auto
 
 @strawberry.django.type(models.Manager)
