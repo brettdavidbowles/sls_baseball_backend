@@ -23,8 +23,8 @@ def play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher):
   stats_list = []
   at_bat_list = []
   while scoreboard['inning'] < 10 or scoreboard['home_team']['runs'] == scoreboard['away_team']['runs']:
-    # if scoreboard['inning'] > 14:
-    #   return play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher)
+    if scoreboard['inning'] > 14:
+      return play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher)
     # this is a temp hack to avoid games going into an absurd amount of innings
     away_bats = half_inning(away_lineup, away_place_in_lineup, home_pitcher, scoreboard['away_team']['at_bats'], scoreboard['inning'], scoreboard['home_team']['at_bats'])
     scoreboard['away_team']['runs'] += away_bats['runs']
