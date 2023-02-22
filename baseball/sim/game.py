@@ -22,7 +22,10 @@ def play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher):
   away_place_in_lineup = 0
   stats_list = []
   at_bat_list = []
-  while scoreboard['inning'] < 10 or scoreboard['home_team']['runs'] == scoreboard['away_team']['runs']:
+  trys = 0
+  while trys < 20 and (scoreboard['inning'] < 10 or scoreboard['home_team']['runs'] == scoreboard['away_team']['runs']):
+    trys += 1
+    # this is dumb i don't like it, but it's late... do a try catch instead
     if scoreboard['inning'] > 14:
       return play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher)
     # this is a temp hack to avoid games going into an absurd amount of innings
