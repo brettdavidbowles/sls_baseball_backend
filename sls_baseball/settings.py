@@ -27,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = [
 #     'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
 # ]
-ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -152,8 +152,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = '/var/www/ec2-18-188-62-39.us-east-2.compute.amazonaws.com/static'
-# STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = '/var/www/ec2-18-188-62-39.us-east-2.compute.amazonaws.com/static'
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
