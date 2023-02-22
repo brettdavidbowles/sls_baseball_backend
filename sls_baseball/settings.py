@@ -28,11 +28,17 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+# dev make all this stuff a conditional
+# DEBUG = True
 
 # ALLOWED_HOSTS = [
 #     'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
 # ]
+
+
 ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com']
+# dev
+# ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com', 'localhost']
 
 
 # Application definition
@@ -152,6 +158,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# prod
 STATIC_ROOT = '/var/www/ec2-18-188-62-39.us-east-2.compute.amazonaws.com/static'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
