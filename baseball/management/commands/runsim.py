@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from baseball.models import Game, Lineup, AtBat, LeftOnRunner
+from baseball.models import Game, Lineup, AtBat, LeftOnRunner, LineupPlayer
 from baseball.sim.game import play_ball
 import datetime
 
@@ -11,10 +11,42 @@ class Command(BaseCommand):
         games_to_run = Game.objects.filter(date__hour=current_time.hour, date__day=current_time.day)
 
         for game in games_to_run:
-          home_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.home_team).players.all().order_by('batting_order_number')
+          if game.at_bats.exists():
+            continue
+          # update lineup create for when a team has never had a lineup created (first game default)
+          try:
+            home_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.home_team).players.all().order_by('batting_order_number')
+          except Lineup.DoesNotExist:
+            home_team_lineup = Lineup.objects.select_related('team').filter(team=game.home_team).order_by('game__date').last().players.all().order_by('batting_order_number')
+            new_home_lineup = Lineup(game=game, team=game.home_team)
+            new_home_lineup.save()
+            new_home_team_lineup_players = []
+            for player in home_team_lineup:
+              new_home_team_lineup_players.append(LineupPlayer(
+                lineup=new_home_lineup,
+                player=player.player,
+                position=player.position,
+                batting_order_number=player.batting_order_number
+              ))
+            LineupPlayer.objects.bulk_create(new_home_team_lineup_players)
           mapped_home_team_lineup = [{ **p.player.__dict__, 'attributes': { **p.player.attributes.__dict__} } for p in home_team_lineup]
-          away_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.away_team).players.all().order_by('batting_order_number')
+          try:
+            away_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.away_team).players.all().order_by('batting_order_number')
+          except Lineup.DoesNotExist:
+            away_team_lineup = Lineup.objects.select_related('team').filter(team=game.away_team).order_by('game__date').last().players.all().order_by('batting_order_number')
+            new_away_lineup = Lineup(game=game, team=game.away_team)
+            new_away_lineup.save()
+            new_away_team_lineup_players = []
+            for player in away_team_lineup:
+              new_away_team_lineup_players.append(LineupPlayer(
+                lineup=new_away_lineup,
+                player=player.player,
+                position=player.position,
+                batting_order_number=player.batting_order_number
+              ))
+            LineupPlayer.objects.bulk_create(new_away_team_lineup_players)
           mapped_away_team_lineup = [{ **p.player.__dict__, 'attributes': { **p.player.attributes.__dict__} } for p in away_team_lineup]
+          
           all_game_players = home_team_lineup | away_team_lineup
 
           home_team_pitcher = mapped_home_team_lineup[0]
