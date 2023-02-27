@@ -115,7 +115,7 @@ class LeftOnRunner(models.Model):
 
 
     def __str__(self):
-        return f"{self.player.first_name} {self.player.last_name} left on base {self.base}"
+        return f"{self.player.first_name} {self.player.last_name} left on base {self.base} in Game {self.at_bat.game.id}"
 
 # class ScheduledGame(models.Model):
 #     date = models.DateTimeField()
