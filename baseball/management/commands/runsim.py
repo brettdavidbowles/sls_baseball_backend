@@ -13,7 +13,7 @@ class Command(BaseCommand):
         for game in games_to_run:
           if game.at_bats.exists():
             continue
-          # update lineup create for when a team has never had a lineup created (first game default)
+          
           try:
             home_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.home_team).players.all().order_by('batting_order_number')
           except Lineup.DoesNotExist:
@@ -88,9 +88,7 @@ class Command(BaseCommand):
 
           mapped_at_bats = [ AtBat(
             game=game,
-            # pitcher=all_game_players.get(player_id=atbat['pitcher_id']).player,
             pitcher=next(player for player in all_game_players if player.player_id == atbat['pitcher_id']).player,
-            # batter=all_game_players.get(player_id=atbat['batter_id']).player,
             batter=next(player for player in all_game_players if player.player_id == atbat['batter_id']).player,
             inning=atbat['inning'],
             strikes=atbat['strikes'],
@@ -106,7 +104,6 @@ class Command(BaseCommand):
               if runner:
                 mapped_runners_left_on.append(LeftOnRunner(
                   at_bat=AtBat.objects.get(game__id=game.id, game_at_bat_number=atbat['game_at_bat_number']),
-                  # player=all_game_players.get(player_id=runner['id']).player,
                   player = next(player for player in all_game_players if player.player_id == runner['id']).player,
                   base=index + 1,
                   at_bat_subindex=0
