@@ -10,10 +10,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         current_time = datetime.datetime.now()
         games_to_run = Game.objects.filter(date__hour=current_time.hour, date__day=current_time.day)
-        print(games_to_run)
         for game in games_to_run:
           if game.at_bats.exists():
-            print(game)
             continue
           # update lineup create for when a team has never had a lineup created (first game default)
           try:
@@ -37,7 +35,6 @@ class Command(BaseCommand):
               new_home_lineup = Lineup(game=game, team=game.home_team)
               new_home_lineup.save()
               new_home_team_lineup_players = Player.objects.select_related('team').filter(team=game.home_team)[0:10]
-              print(new_home_team_lineup_players)
               for index, player in enumerate(new_home_team_lineup_players):
                 home_team_lineup.append(LineupPlayer(
                   lineup=new_home_lineup,
