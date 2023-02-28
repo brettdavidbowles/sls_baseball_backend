@@ -53,12 +53,13 @@ class Season:
     start_date: auto
     end_date: auto
 
-@strawberry.django.type(models.Game)
+@strawberry.django.type(models.Game, pagination=True)
 class Game:
+    id: auto
     date: auto
     home_team: Team
     away_team: Team
-    leauge: League
+    league: League
     season: Season
     at_bats: List['AtBat']
     lineups: List['Lineup']

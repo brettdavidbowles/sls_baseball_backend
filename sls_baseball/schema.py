@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute
+from .types import Player, League, PlayerAttribute, Game
 from .inputs import PlayerInput, LeagueInput
 from strawberry_django import mutations
 from itertools import islice
@@ -10,6 +10,7 @@ from itertools import islice
 class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
+    games: List[Game] = strawberry.django.field()
 
 @strawberry.type
 class Mutation:
