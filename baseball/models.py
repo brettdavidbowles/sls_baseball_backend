@@ -69,6 +69,9 @@ class Game(models.Model):
     home_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="home_games")
     away_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="away_games")
 
+    class Meta:
+        ordering = ["-date"]
+
     def __str__(self):
         return f"Game {self.id} on {self.date}"
 
