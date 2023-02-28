@@ -63,17 +63,14 @@ class Season(models.Model):
         return f"{self.name}"
 
 class Game(models.Model):
-    date = models.DateTimeField()
+    date_time = models.DateTimeField()
     league = models.ForeignKey("League", on_delete=models.RESTRICT, related_name="games")
     season = models.ForeignKey("Season", on_delete=models.RESTRICT, related_name="games")
     home_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="home_games")
     away_team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="away_games")
 
-    class Meta:
-        ordering = ["-date"]
-
     def __str__(self):
-        return f"Game {self.id} on {self.date}"
+        return f"Game {self.id} on {self.date_time}"
 
 class Lineup(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="lineups")
