@@ -5,20 +5,12 @@ from .types import Player, League, PlayerAttribute, Game
 from .inputs import PlayerInput, LeagueInput
 from strawberry_django import mutations
 from itertools import islice
-import datetime
 
 @strawberry.type
 class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
-    # @strawberry.field
-    # def games(self, info, is_past: bool = None) -> List[Game]:
-    #     if is_past:
-    #         return filter(lambda game: game.is_past == True)
-    #     elif not is_past:
-    #         return filter(lambda game: game.is_past == False)
-    #     return models.Game.objects.all()
 
 @strawberry.type
 class Mutation:
