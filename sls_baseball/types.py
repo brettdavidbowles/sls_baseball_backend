@@ -2,6 +2,7 @@ import strawberry
 from baseball import models
 from typing import List
 from strawberry import auto
+import datetime
 
 
 @strawberry.django.type(models.User)
@@ -53,10 +54,21 @@ class Season:
     start_date: auto
     end_date: auto
 
-@strawberry.django.type(models.Game, pagination=True)
+@strawberry.django.filters.filter(models.Game)
+class GameFilter:
+    is_past: bool or None
+    def filter_is_past(self, queryset):
+        if self.is_past is None:
+            return queryset.order_by('date_time')
+        if self.is_past:
+            return queryset.filter(date_time__lte=datetime.datetime.now()).order_by('-date_time')
+        else:
+            return queryset.filter(date_time__gt=datetime.datetime.now()).order_by('date_time')
+
+@strawberry.django.type(models.Game, pagination=True, filters=GameFilter)
 class Game:
     id: auto
-    date: auto
+    date_time: auto
     home_team: Team
     away_team: Team
     league: League
