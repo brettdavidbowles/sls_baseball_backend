@@ -60,6 +60,7 @@ class Season:
 
 @strawberry.django.filters.filter(models.Game)
 class GameFilter:
+    id: auto
     is_past: bool or None
     def filter_is_past(self, queryset):
         if self.is_past is None:
@@ -98,13 +99,16 @@ class LineupPlayer:
 @strawberry.django.type(models.AtBat)
 class AtBat:
     id: auto
-    player: Player
+    pitcher: Player
+    batter: Player
     inning: auto
     strikes: auto
     balls: auto
     rbis: auto
     outcome: auto
     left_on_runners: List['LeftOnRunner']
+    game_at_bat_number: auto
+    game: Game
 
 @strawberry.django.type(models.LeftOnRunner)
 class LeftOnRunner:

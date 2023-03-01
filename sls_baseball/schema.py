@@ -11,6 +11,7 @@ class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
+    gameByPk: Game = strawberry.django.field(pagination=False)
 
 @strawberry.type
 class Mutation:
