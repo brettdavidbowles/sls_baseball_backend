@@ -11,6 +11,7 @@ class User:
 
 @strawberry.django.type(models.Player)
 class Player:
+    id: auto
     first_name: auto
     last_name: auto
     team: 'Team'
@@ -31,6 +32,7 @@ class PlayerAttribute:
 
 @strawberry.django.type(models.Team)
 class Team:
+    id: auto
     name: auto
     location: auto
     stadium: auto
@@ -44,12 +46,14 @@ class League:
 
 @strawberry.django.type(models.Manager)
 class Manager:
+    id: auto
     first_name: auto
     last_name: auto
     team: 'Team'
 
 @strawberry.django.type(models.Season)
 class Season:
+    id: auto
     name: auto
     start_date: auto
     end_date: auto
@@ -78,12 +82,14 @@ class Game:
 
 @strawberry.django.type(models.Lineup)
 class Lineup:
+    id: auto
     game: 'Game'
     team: Team
     players: List['LineupPlayer']
 
 @strawberry.django.type(models.LineupPlayer)
 class LineupPlayer:
+    id: auto
     lineup: Lineup
     player: Player
     position: auto
@@ -91,6 +97,7 @@ class LineupPlayer:
 
 @strawberry.django.type(models.AtBat)
 class AtBat:
+    id: auto
     player: Player
     inning: auto
     strikes: auto
@@ -101,6 +108,7 @@ class AtBat:
 
 @strawberry.django.type(models.LeftOnRunner)
 class LeftOnRunner:
+    id: auto
     player: Player
     base: auto
     at_bat_subindex: auto
