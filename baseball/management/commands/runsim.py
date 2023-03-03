@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         current_time = datetime.datetime.now()
-        games_to_run = Game.objects.filter(date__hour=current_time.hour, date__day=current_time.day)
+        games_to_run = Game.objects.filter(date_time__hour=current_time.hour, date_time__day=current_time.day)
         for game in games_to_run:
           if game.at_bats.exists():
             continue
@@ -18,7 +18,7 @@ class Command(BaseCommand):
             home_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.home_team).players.all().order_by('batting_order_number')
           except Lineup.DoesNotExist:
             try:
-              home_team_lineup = Lineup.objects.select_related('team').filter(team=game.home_team).order_by('game__date').last().players.all().order_by('batting_order_number')
+              home_team_lineup = Lineup.objects.select_related('team').filter(team=game.home_team).order_by('game__date_time').last().players.all().order_by('batting_order_number')
               new_home_lineup = Lineup(game=game, team=game.home_team)
               new_home_lineup.save()
               new_home_team_lineup_players = []
@@ -49,7 +49,7 @@ class Command(BaseCommand):
             away_team_lineup = Lineup.objects.select_related('game').get(game=game, team=game.away_team).players.all().order_by('batting_order_number')
           except Lineup.DoesNotExist:
             try:
-              away_team_lineup = Lineup.objects.select_related('team').filter(team=game.away_team).order_by('game__date').last().players.all().order_by('batting_order_number')
+              away_team_lineup = Lineup.objects.select_related('team').filter(team=game.away_team).order_by('game__date_time').last().players.all().order_by('batting_order_number')
               new_away_lineup = Lineup(game=game, team=game.away_team)
               new_away_lineup.save()
               new_away_team_lineup_players = []
