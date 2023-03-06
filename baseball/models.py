@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Sum, Max
 
 class User(AbstractUser):
     pass
@@ -72,6 +73,22 @@ class Game(models.Model):
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
 
+    def home_team_total_runs(self):
+        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum']
+    def away_team_total_runs(self):
+        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum']
+
+class HalfInning(models.Model):
+    game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="half_innings")
+    inning = models.IntegerField()
+    home_team_at_bat = models.BooleanField()
+
+    def __str__(self):
+        if self.home_team_at_bat:
+            return f"Bottom of {self.inning} Inning of Game {self.game.id}"
+        else:
+            return f"Top of {self.inning} Inning of Game {self.game.id}"
+
 class Lineup(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="lineups")
     team = models.ForeignKey("Team", on_delete=models.CASCADE, related_name="lineups")
@@ -91,9 +108,10 @@ class LineupPlayer(models.Model):
 class AtBat(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="at_bats")
     # player = models.ManyToManyField("Player")
-    pitcher = models.ForeignKey("Player", on_delete=models.CASCADE, related_name="pitched_at_bats")
-    batter = models.ForeignKey("Player", on_delete=models.CASCADE, related_name="batted_at_bats")
-    inning = models.IntegerField()
+    pitcher = models.ForeignKey("Player", on_delete=models.RESTRICT, related_name="pitched_at_bats")
+    batter = models.ForeignKey("Player", on_delete=models.RESTRICT, related_name="batted_at_bats")
+    half_inning = models.ForeignKey("HalfInning", on_delete=models.CASCADE, related_name="at_bats")
+    # inning = models.IntegerField()
     strikes = models.IntegerField()
     balls = models.IntegerField()
     rbis = models.IntegerField()

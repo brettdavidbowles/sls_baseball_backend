@@ -58,6 +58,14 @@ class Season:
     start_date: auto
     end_date: auto
 
+@strawberry.django.type(models.HalfInning)
+class HalfInning:
+    id: auto
+    inning: auto
+    at_bats: List['AtBat']
+    game: 'Game'
+    home_team_at_bat: auto
+
 @strawberry.django.filters.filter(models.Game)
 class GameFilter:
     id: auto
@@ -70,6 +78,7 @@ class GameFilter:
         else:
             return queryset.filter(date_time__gt=datetime.datetime.now()).order_by('date_time')
 
+
 @strawberry.django.type(models.Game, pagination=True, filters=GameFilter)
 class Game:
     id: auto
@@ -80,6 +89,9 @@ class Game:
     season: Season
     at_bats: List['AtBat']
     lineups: List['Lineup']
+    half_innings: List['HalfInning']
+    home_team_total_runs: int
+    away_team_total_runs: int
 
 @strawberry.django.type(models.Lineup)
 class Lineup:
@@ -101,7 +113,7 @@ class AtBat:
     id: auto
     pitcher: Player
     batter: Player
-    inning: auto
+    half_inning: HalfInning
     strikes: auto
     balls: auto
     rbis: auto

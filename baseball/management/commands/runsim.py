@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
-from baseball.models import Game, Lineup, AtBat, LeftOnRunner, LineupPlayer, Player
+from baseball.models import Game, Lineup, AtBat, LeftOnRunner, LineupPlayer, Player, HalfInning
 from baseball.sim.game import play_ball
 from baseball.constants import positions
 import datetime
+import math
 
 class Command(BaseCommand):
     help = 'Runs the baseball simulation'
@@ -84,13 +85,26 @@ class Command(BaseCommand):
           away_team_pitcher = mapped_away_team_lineup[0]
           home_team_batters = mapped_home_team_lineup[1:]
           away_team_batters = mapped_away_team_lineup[1:]
-          raw_at_bat_list = play_ball(home_team_batters, home_team_pitcher, away_team_batters, away_team_pitcher)['at_bat_list']
+          new_game = play_ball(home_team_batters, home_team_pitcher, away_team_batters, away_team_pitcher)
+          raw_at_bat_list = new_game['at_bat_list']
+          number_of_half_innings = new_game['half_innings']
+
+          half_innings = []
+
+          for i in range(number_of_half_innings):
+            half_innings.append(HalfInning(
+              game=game,
+              inning=math.ceil((i+1)/2),
+              home_team_at_bat=i % 2 == 1,
+            ))
+          HalfInning.objects.bulk_create(half_innings)
+
 
           mapped_at_bats = [ AtBat(
             game=game,
             pitcher=next(player for player in all_game_players if player.player_id == atbat['pitcher_id']).player,
             batter=next(player for player in all_game_players if player.player_id == atbat['batter_id']).player,
-            inning=atbat['inning'],
+            half_inning=half_innings[atbat['half_inning']],
             strikes=atbat['strikes'],
             balls=atbat['balls'],
             rbis=atbat['rbis'],

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Player, PlayerAttribute, Team, League, Manager, Season, Game, Lineup, LineupPlayer, AtBat, LeftOnRunner
+from .models import User, Player, PlayerAttribute, Team, League, Manager, Season, Game, Lineup, LineupPlayer, AtBat, LeftOnRunner, HalfInning
 
 
 admin.site.register(User, UserAdmin)
@@ -16,3 +16,4 @@ admin.site.register(AtBat)
 admin.site.register(LeftOnRunner)
 # admin.site.register(ScheduledGame)
 admin.site.register(PlayerAttribute)
+admin.site.register(HalfInning)
