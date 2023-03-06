@@ -72,41 +72,11 @@ class Game(models.Model):
 
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
-    
-    # def scores_by_inning(self):
-    #     self.at_bats.select_related().all()
-    #     # return [1, 2, 4, 5]
-    #     return {
-    #         'meh': 'ldsfja;'
-    #     }
-
-    # @property
-    # def score_board(self):
-    #     at_bat_one = self.at_bats
-    #     print(self.at_bats.all())
-    #     at_bats = self.at_bats.select_related().all()
-    #     home_at_bats = at_bats.filter(batter__team=self.home_team)
-    #     away_at_bats = at_bats.filter(batter__team=self.away_team)
-    #     # print(AtBat.objects.select_related('game').filter(game=self))
-    #     return {
-    #         'home_team': 'maybe',
-    #         'away_team': 'asdfj;l'
-    #         # {
-    #         #     'runs': home_at_bats.aggregate(Sum('rbis'))
-    #         # }
-    #     }
-    @property
-    # def number_of_innings(self):
-    #     print(self.at_bats.aggregate(Max('inning')))
-    #     return self.at_bats.aggregate(Max('inning'))['inning__max']
 
     def home_team_total_runs(self):
         return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum']
     def away_team_total_runs(self):
         return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum']
-    # def home_team_runs_per_inning(self):
-    #     print(self.at_bats.filter(batter__team=self.home_team).values('inning').annotate(Sum('rbis')))
-    #     return self.at_bats.filter(batter__team=self.home_team).values('inning').annotate(Sum('rbis'))
 
 class HalfInning(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="half_innings")
