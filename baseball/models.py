@@ -126,7 +126,7 @@ class LeftOnRunner(models.Model):
       "first_name": "default",
       "last_name": "runner",
     }
-    at_bat = models.ForeignKey("AtBat", on_delete=models.RESTRICT, related_name="runners_left_on_base")
+    at_bat = models.ForeignKey("AtBat", on_delete=models.CASCADE, related_name="runners_left_on_base")
     player = models.ForeignKey("Player", default=default_runner, on_delete=models.SET_DEFAULT)
     base = models.IntegerField()
     at_bat_subindex = models.IntegerField(default=1) # this is if an at bat has stolen bases, thus multiple scenarios. i hate the name and hate that i need this comment but i'm drawing a blank
