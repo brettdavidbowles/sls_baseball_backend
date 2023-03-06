@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Sum, Max
 
 class User(AbstractUser):
     pass
@@ -71,6 +72,52 @@ class Game(models.Model):
 
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
+    
+    # def scores_by_inning(self):
+    #     self.at_bats.select_related().all()
+    #     # return [1, 2, 4, 5]
+    #     return {
+    #         'meh': 'ldsfja;'
+    #     }
+
+    # @property
+    # def score_board(self):
+    #     at_bat_one = self.at_bats
+    #     print(self.at_bats.all())
+    #     at_bats = self.at_bats.select_related().all()
+    #     home_at_bats = at_bats.filter(batter__team=self.home_team)
+    #     away_at_bats = at_bats.filter(batter__team=self.away_team)
+    #     # print(AtBat.objects.select_related('game').filter(game=self))
+    #     return {
+    #         'home_team': 'maybe',
+    #         'away_team': 'asdfj;l'
+    #         # {
+    #         #     'runs': home_at_bats.aggregate(Sum('rbis'))
+    #         # }
+    #     }
+    @property
+    # def number_of_innings(self):
+    #     print(self.at_bats.aggregate(Max('inning')))
+    #     return self.at_bats.aggregate(Max('inning'))['inning__max']
+
+    def home_team_total_runs(self):
+        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum']
+    def away_team_total_runs(self):
+        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum']
+    # def home_team_runs_per_inning(self):
+    #     print(self.at_bats.filter(batter__team=self.home_team).values('inning').annotate(Sum('rbis')))
+    #     return self.at_bats.filter(batter__team=self.home_team).values('inning').annotate(Sum('rbis'))
+
+class HalfInning(models.Model):
+    game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="half_innings")
+    inning = models.IntegerField()
+    home_team_at_bat = models.BooleanField()
+
+    def __str__(self):
+        if self.home_team_at_bat:
+            return f"Bottom of {self.inning} Inning of Game {self.game.id}"
+        else:
+            return f"Top of {self.inning} Inning of Game {self.game.id}"
 
 class Lineup(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="lineups")
@@ -93,7 +140,8 @@ class AtBat(models.Model):
     # player = models.ManyToManyField("Player")
     pitcher = models.ForeignKey("Player", on_delete=models.RESTRICT, related_name="pitched_at_bats")
     batter = models.ForeignKey("Player", on_delete=models.RESTRICT, related_name="batted_at_bats")
-    inning = models.IntegerField()
+    half_inning = models.ForeignKey("HalfInning", on_delete=models.CASCADE, related_name="at_bats")
+    # inning = models.IntegerField()
     strikes = models.IntegerField()
     balls = models.IntegerField()
     rbis = models.IntegerField()
