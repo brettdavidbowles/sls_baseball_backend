@@ -86,3 +86,6 @@ def create_random_pitcher_and_lineup(team_name):
       random() * 100,
     ))
   return lineup
+
+def isAHit(outcome):
+  return outcome in AT_BAT_OUTCOMES['hit']

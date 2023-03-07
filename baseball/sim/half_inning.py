@@ -1,7 +1,7 @@
-from .utility_functions import find_next_batter_index
-from .classes import Player
+from ..utility_functions import find_next_batter_index
+from ..classes import Player
 from .at_bat import at_bat
-from .constants import AT_BAT_OUTCOMES
+from ..constants import AT_BAT_OUTCOMES
 
 def half_inning(lineup, place_in_lineup, pitcher, team_at_bats, half_inning, opponent_at_bats):
   runners_on = [False, False, False]

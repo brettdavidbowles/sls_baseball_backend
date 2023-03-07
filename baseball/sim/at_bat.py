@@ -1,6 +1,6 @@
-from .classes import Player
-from .constants import BATTING_AVERAGE_ATTRIBUTES, WHIP_ATTRIBUTES, SLUGGING_PERCENTAGE_ATTRIBUTES
-from .utility_functions import find_attributes_and_apply_weights, random_pitch_count, run_bases
+from ..classes import Player
+from ..constants import BATTING_AVERAGE_ATTRIBUTES, WHIP_ATTRIBUTES, SLUGGING_PERCENTAGE_ATTRIBUTES
+from ..utility_functions import find_attributes_and_apply_weights, random_pitch_count, run_bases
 from random import random
 from operator import itemgetter
 
