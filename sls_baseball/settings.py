@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import environ
+import json
 
 env = environ.Env()
 environ.Env.read_env()
@@ -32,14 +33,8 @@ if env('ENVIRONMENT') == 'production':
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
 
-# ALLOWED_HOSTS = [
-#     'sls-baseball-dev.us-east-2.elasticbeanstalk.com',
-# ]
 
-
-# ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com']
-# dev
-ALLOWED_HOSTS = ['18.188.62.39', 'ec2-18-188-62-39.us-east-2.compute.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = json.loads(env('ALLOWED_HOSTS'))
 
 
 # Application definition
@@ -161,7 +156,7 @@ USE_TZ = False
 STATIC_URL = '/static/'
 if env('ENVIRONMENT') == 'production':
     STATIC_ROOT = env('STATIC_ROOT')
-    STATICFILES_DIRS = env('STATICFILES_DIRS')
+    STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
