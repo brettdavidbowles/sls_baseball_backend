@@ -65,6 +65,9 @@ class HalfInning:
     at_bats: List['AtBat']
     game: 'Game'
     home_team_at_bat: auto
+    rbis: int
+    hits: int
+    errors: int
 
 @strawberry.django.filters.filter(models.Game)
 class GameFilter:
@@ -92,6 +95,10 @@ class Game:
     half_innings: List['HalfInning']
     home_team_total_runs: int
     away_team_total_runs: int
+    home_team_total_hits: int
+    away_team_total_hits: int
+    home_team_total_errors: int
+    away_team_total_errors: int
 
 @strawberry.django.type(models.Lineup)
 class Lineup:
@@ -116,6 +123,7 @@ class AtBat:
     half_inning: HalfInning
     strikes: auto
     balls: auto
+    errors: auto
     rbis: auto
     outcome: auto
     left_on_runners: List['LeftOnRunner']

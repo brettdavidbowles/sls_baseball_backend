@@ -1,6 +1,6 @@
 from .half_inning import half_inning
-from .classes import Player
-from .utility_functions import find_next_batter_index, create_random_pitcher_and_lineup
+from ..classes import Player
+from ..utility_functions import find_next_batter_index, create_random_pitcher_and_lineup
 
 def play_ball(home_lineup, home_pitcher, away_lineup, away_pitcher):
   scoreboard = {
