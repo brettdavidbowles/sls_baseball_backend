@@ -100,13 +100,13 @@ class HalfInning(models.Model):
             return f"Top of {self.inning} Inning of Game {self.game.id}"
     @property
     def rbis(self):
-        return self.at_bats.aggregate(Sum('rbis'))['rbis__sum']
+        return self.at_bats.aggregate(Sum('rbis'))['rbis__sum'] or 0
     @property
     def hits(self):
         return self.at_bats.filter(outcome__in=AT_BAT_OUTCOMES['hit']).count()
     @property
     def errors(self):
-        return self.at_bats.aggregate(Sum('errors'))['errors__sum']
+        return self.at_bats.aggregate(Sum('errors'))['errors__sum'] or 0
 
 class Lineup(models.Model):
     game = models.ForeignKey("Game", on_delete=models.CASCADE, related_name="lineups")
