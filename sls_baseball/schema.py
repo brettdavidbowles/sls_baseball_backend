@@ -1,13 +1,14 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game
-from .inputs import PlayerInput, LeagueInput
-from strawberry_django import mutations
+from .types import Player, League, PlayerAttribute, Game, User
+from .inputs import PlayerInput, LeagueInput, UserInput
+from strawberry_django import auth, mutations
 from itertools import islice
 
 @strawberry.type
 class Query:
+    me: User = auth.current_user()
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
@@ -15,6 +16,9 @@ class Query:
 
 @strawberry.type
 class Mutation:
+    login: User = auth.login()
+    logout = auth.logout()
+    register: User = auth.register(UserInput)
     createLeague: League = mutations.create(LeagueInput)
     @strawberry.mutation
     def createPlayer(self, info, input: PlayerInput) -> Player:

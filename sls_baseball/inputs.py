@@ -1,6 +1,13 @@
 import strawberry
 from baseball import models
 from strawberry import auto
+from django.contrib.auth import get_user_model
+
+@strawberry.django.input(get_user_model())
+class UserInput:
+    username: auto
+    email: auto
+    password: auto
 
 @strawberry.django.input(models.Player)
 class PlayerInput:

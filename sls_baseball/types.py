@@ -3,11 +3,13 @@ from baseball import models
 from typing import List
 from strawberry import auto
 import datetime
+from django.contrib.auth import get_user_model
 
 
-@strawberry.django.type(models.User)
+@strawberry.django.type(get_user_model())
 class User:
-    pass
+    username: auto
+    email: auto
 
 @strawberry.django.type(models.Player)
 class Player:
