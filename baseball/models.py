@@ -47,9 +47,10 @@ class League(models.Model):
         return f"{self.name}"
 
 class Manager(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
     team = models.ForeignKey("Team", on_delete=models.SET_NULL, related_name="managers", null=True)
+    user = models.ForeignKey("User", on_delete=models.SET_NULL, related_name="managers", null=True)
 
     def __str__(self):
         if self.first_name or self.last_name:

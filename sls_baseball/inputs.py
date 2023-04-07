@@ -29,3 +29,8 @@ class PlayerAttributeInput:
 @strawberry.django.input(models.League)
 class LeagueInput:
     name: auto
+
+@strawberry.django.input(models.Team)
+class TeamInput:
+    name: auto
+    league: str
