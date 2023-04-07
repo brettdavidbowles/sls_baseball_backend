@@ -8,8 +8,10 @@ from django.contrib.auth import get_user_model
 
 @strawberry.django.type(get_user_model())
 class User:
+    id: auto
     username: auto
     email: auto
+    managers: List['Manager']
 
 @strawberry.django.type(models.Player)
 class Player:
@@ -40,6 +42,7 @@ class Team:
     stadium: auto
     league: 'League'
     games: List['Game']
+    managers: List['Manager']
 
 @strawberry.django.type(models.League)
 class League:
@@ -52,6 +55,7 @@ class Manager:
     first_name: auto
     last_name: auto
     team: 'Team'
+    user: User
 
 @strawberry.django.type(models.Season)
 class Season:

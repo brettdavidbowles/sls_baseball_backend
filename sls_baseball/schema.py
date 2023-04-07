@@ -1,10 +1,17 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game, User
-from .inputs import PlayerInput, LeagueInput, UserInput
+from .types import Player, League, PlayerAttribute, Game, User, Team
+from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput
 from strawberry_django import auth, mutations
 from itertools import islice
+from django.http.request import HttpRequest
+
+def get_team_by_user(info):
+    request: HttpRequest = info.context.request
+    if not request.user.is_authenticated:
+        raise Exception('User is not authenticated')
+    return models.Team.objects.filter(managers__user=request.user)
 
 @strawberry.type
 class Query:
@@ -13,6 +20,7 @@ class Query:
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
     gameByPk: Game = strawberry.django.field(pagination=False)
+    teamsByUser: List[Team] = strawberry.django.field(resolver=get_team_by_user)
 
 @strawberry.type
 class Mutation:
@@ -62,5 +70,13 @@ class Mutation:
             models.PlayerAttribute.objects.bulk_create(attributes_batch, batch_size)
             number_created += batch_size
         return players
-
+    
+    @strawberry.mutation
+    def createTeam(self, info, input: TeamInput) -> Team:
+        request: HttpRequest = info.context.request
+        if not request.user.is_authenticated:
+            raise Exception('User is not authenticated')
+        team = models.Team.objects.create(name=input.name, league=models.League.objects.get(name=input.league))
+        models.Manager.objects.create(team=team, user=request.user)
+        return team
 schema = strawberry.Schema(query=Query, mutation=Mutation)
