@@ -34,4 +34,3 @@ class LeagueInput:
 class TeamInput:
     name: auto
     league: str
-    # user: str
