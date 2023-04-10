@@ -12,10 +12,15 @@ def get_team_by_user(info):
     if not request.user.is_authenticated:
         raise Exception('User is not authenticated')
     return models.Team.objects.filter(managers__user=request.user)
+def get_current_user(info):
+    request: HttpRequest = info.context.request
+    if not request.user.is_authenticated:
+        raise Exception('User is not authenticated')
+    return request.user
 
 @strawberry.type
 class Query:
-    me: User = auth.current_user()
+    me: User = strawberry.django.field(resolver=get_current_user)
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
