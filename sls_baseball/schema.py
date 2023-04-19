@@ -10,18 +10,19 @@ from django.http.request import HttpRequest
 def get_team_by_user(info):
     request: HttpRequest = info.context.request
     if not request.user.is_authenticated:
-        raise Exception('User is not authenticated')
+        return None
     return models.Team.objects.filter(managers__user=request.user)
 def get_current_user(info):
     request: HttpRequest = info.context.request
     if not request.user.is_authenticated:
-        raise Exception('User is not authenticated')
+        return User(id="", username="", email="", managers=[])
     return request.user
 
 @strawberry.type
 class Query:
-    me: User = strawberry.django.field(resolver=get_current_user)
-    players: List[Player] = strawberry.django.field()
+    me: User = auth.current_user()
+    auth: User = strawberry.django.field(resolver=get_current_user)
+    # players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
     gameByPk: Game = strawberry.django.field(pagination=False)
