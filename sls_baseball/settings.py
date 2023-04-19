@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import environ
 import json
+import os
 
 env = environ.Env()
 environ.Env.read_env()
@@ -35,6 +36,11 @@ if env('ENVIRONMENT') == 'development':
 
 
 ALLOWED_HOSTS = json.loads(env('ALLOWED_HOSTS'))
+
+if env('ENVIRONMENT') == 'production':
+    LOGIN_REDIRECT_URL = '/'
+if env('ENVIRONMENT') == 'development':
+    LOGIN_REDIRECT_URL = 'http://localhost:3000/'
 
 
 # Application definition
@@ -74,7 +80,7 @@ ROOT_URLCONF = 'sls_baseball.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
