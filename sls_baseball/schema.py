@@ -20,7 +20,7 @@ def get_current_user(info):
 
 @strawberry.type
 class Query:
-    # me: User = auth.current_user()
+    me: User = auth.current_user()
     auth: User = strawberry.django.field(resolver=get_current_user)
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
