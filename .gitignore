@@ -1,3 +1,5 @@
+.DJANGO_SECRET_KEY
+
 # Django #
 *.log
 *.pot
