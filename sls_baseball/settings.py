@@ -31,6 +31,15 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 if env('ENVIRONMENT') == 'production':
     DEBUG = False
+    ALLOWED_HOSTS = ['api.baseballsimulator.online', '3.129.154.203']
+    CSRF_TRUSTED_ORIGINS = ['baseballsimulator.online', 'www.baseballsimulator.online']
+    CSRF_COOKIE_DOMAIN = 'baseballsimulator.online'
+    SESSION_COOKIE_SECURE = True
+    CORS_ALLOW_CREDENTIALS = True
+    CORS_ORIGIN_WHITELIST = [
+        "https://baseballsimulator.online",
+        "https://www.baseballsimulator.online"
+    ]
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
 
@@ -38,7 +47,7 @@ if env('ENVIRONMENT') == 'development':
 ALLOWED_HOSTS = json.loads(env('ALLOWED_HOSTS'))
 
 if env('ENVIRONMENT') == 'production':
-    LOGIN_REDIRECT_URL = '/'
+    LOGIN_REDIRECT_URL = 'https://baseballsimulator.online'
 if env('ENVIRONMENT') == 'development':
     LOGIN_REDIRECT_URL = 'http://localhost:3000/'
 
@@ -73,6 +82,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
 "http://localhost:3000",
 "http://127.0.0.1:3000",
+"https://baseballsimulator.online",
 ]
 
 ROOT_URLCONF = 'sls_baseball.urls'
