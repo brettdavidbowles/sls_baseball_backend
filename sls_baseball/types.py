@@ -43,6 +43,7 @@ class Team:
     league: 'League'
     games: List['Game']
     managers: List['Manager']
+    players: List[Player]
 
 @strawberry.django.type(models.League)
 class League:
