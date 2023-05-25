@@ -43,6 +43,7 @@ if env('ENVIRONMENT') == 'production':
     ]
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
+    ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203', 'localhost']
 
 
 ALLOWED_HOSTS = json.loads(env('ALLOWED_HOSTS'))
