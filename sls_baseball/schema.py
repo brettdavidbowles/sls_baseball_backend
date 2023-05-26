@@ -6,6 +6,7 @@ from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput
 from strawberry_django import auth, mutations
 from itertools import islice
 from django.http.request import HttpRequest
+from django.contrib.auth import authenticate, login
 
 
 def get_team_by_user(info):
@@ -36,10 +37,20 @@ class Query:
 
 @strawberry.type
 class Mutation:
-    login: User = auth.login()
     logout = auth.logout()
     register: User = auth.register(UserInput)
     createLeague: League = mutations.create(LeagueInput)
+
+    @strawberry.mutation
+    def login(self, info, username: str, password: str) -> User:
+        request: HttpRequest = info.context.request
+        user = authenticate(
+            request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return user
+        else:
+            return User(id="", username="", email="")
 
     @strawberry.mutation
     def createPlayer(self, info, input: PlayerInput) -> Player:

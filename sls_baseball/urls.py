@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('graphql/', GraphQLView.as_view(schema=schema)),
     # path('accounts/', include('django.contrib.auth.urls')),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('password-reset', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    # path('login/', auth_views.LoginView.as_view(), name='login'),
+    # path('password-reset', auth_views.PasswordResetView.as_view(), name='password_reset'),
 ]
