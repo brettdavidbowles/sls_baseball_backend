@@ -56,11 +56,6 @@ if env('ENVIRONMENT') == 'development':
 
 ALLOWED_HOSTS = json.loads(env('ALLOWED_HOSTS'))
 
-if env('ENVIRONMENT') == 'production':
-    LOGIN_REDIRECT_URL = 'https://baseballsimulator.online/profile'
-if env('ENVIRONMENT') == 'development':
-    LOGIN_REDIRECT_URL = 'http://localhost:3000/profile'
-
 
 # Application definition
 
