@@ -23,6 +23,14 @@ def get_current_user(info):
     return request.user
 
 
+def get_team_by_id(id: str):
+    return models.Team.objects.get(id=id)
+
+
+def get_player_by_id(id: str):
+    return models.Player.objects.get(id=id)
+
+
 @strawberry.type
 class Query:
     me: User = auth.current_user()
@@ -33,6 +41,10 @@ class Query:
     gameByPk: Game = strawberry.django.field(pagination=False)
     teamsByUser: List[Team] = strawberry.django.field(
         resolver=get_team_by_user)
+    teamById: Team = strawberry.django.field(
+        resolver=get_team_by_id)
+    playerById: Player = strawberry.django.field(
+        resolver=get_player_by_id)
 
 
 @strawberry.type
