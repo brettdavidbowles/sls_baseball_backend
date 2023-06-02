@@ -54,10 +54,16 @@ class Mutation:
     createLeague: League = mutations.create(LeagueInput)
 
     @strawberry.mutation
+    def register(self, info, input: UserInput) -> User:
+        user = models.User.objects.create_user(
+            username=input.username.lower(), password=input.password, email=input.email)
+        return user
+
+    @strawberry.mutation
     def login(self, info, username: str, password: str) -> User:
         request: HttpRequest = info.context.request
         user = authenticate(
-            request, username=username, password=password)
+            request, username=username.lower(), password=password)
         if user is not None:
             login(request, user)
             return user
