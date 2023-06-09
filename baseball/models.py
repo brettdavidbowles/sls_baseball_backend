@@ -116,6 +116,7 @@ class Game(models.Model):
 
 
 def create_default_lineup(team, game):
+    # need to account for traded players
     try:
         team_lineup = Lineup.objects.select_related('team').filter(team=team).order_by(
             'game__date_time').last().players.all().order_by('batting_order_number')
