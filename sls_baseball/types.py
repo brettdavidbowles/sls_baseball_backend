@@ -13,6 +13,7 @@ class User:
     email: auto
     managers: List['Manager']
 
+
 @strawberry.django.type(models.Player)
 class Player:
     id: auto
@@ -20,9 +21,11 @@ class Player:
     last_name: auto
     team: 'Team'
     at_bats: List['AtBat']
+
     @strawberry.django.field
     def attributes(self, info) -> 'PlayerAttribute':
         return models.PlayerAttribute.objects.get(player__id=self.id)
+
 
 @strawberry.django.type(models.PlayerAttribute)
 class PlayerAttribute:
@@ -33,6 +36,7 @@ class PlayerAttribute:
     speed: auto
     strength: auto
     willpower: auto
+
 
 @strawberry.django.type(models.Team)
 class Team:
@@ -45,10 +49,12 @@ class Team:
     managers: List['Manager']
     players: List[Player]
 
+
 @strawberry.django.type(models.League)
 class League:
     id: auto
     name: auto
+
 
 @strawberry.django.type(models.Manager)
 class Manager:
@@ -58,12 +64,14 @@ class Manager:
     team: 'Team'
     user: User
 
+
 @strawberry.django.type(models.Season)
 class Season:
     id: auto
     name: auto
     start_date: auto
     end_date: auto
+
 
 @strawberry.django.type(models.HalfInning)
 class HalfInning:
@@ -76,10 +84,12 @@ class HalfInning:
     hits: int
     errors: int
 
+
 @strawberry.django.filters.filter(models.Game)
 class GameFilter:
     id: auto
     is_past: bool or None
+
     def filter_is_past(self, queryset):
         if self.is_past is None:
             return queryset.order_by('date_time')
@@ -106,6 +116,8 @@ class Game:
     away_team_total_hits: int
     home_team_total_errors: int
     away_team_total_errors: int
+    is_past: bool
+
 
 @strawberry.django.type(models.Lineup)
 class Lineup:
@@ -114,6 +126,7 @@ class Lineup:
     team: Team
     players: List['LineupPlayer']
 
+
 @strawberry.django.type(models.LineupPlayer)
 class LineupPlayer:
     id: auto
@@ -121,6 +134,7 @@ class LineupPlayer:
     player: Player
     position: auto
     batting_order_number: auto
+
 
 @strawberry.django.type(models.AtBat)
 class AtBat:
@@ -136,6 +150,7 @@ class AtBat:
     left_on_runners: List['LeftOnRunner']
     game_at_bat_number: auto
     game: Game
+
 
 @strawberry.django.type(models.LeftOnRunner)
 class LeftOnRunner:
