@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game, User, Team
+from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup
 from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput
 from strawberry_django import auth, mutations
 from itertools import islice
@@ -35,6 +35,10 @@ def get_game_by_id(id: str):
     return models.Game.objects.get(id=id)
 
 
+def get_lineup_by_id(id: str):
+    return models.Lineup.objects.get(id=id)
+
+
 @strawberry.type
 class Query:
     me: User = auth.current_user()
@@ -52,6 +56,8 @@ class Query:
         resolver=get_team_by_id)
     playerById: Player = strawberry.django.field(
         resolver=get_player_by_id)
+    lineupById: Lineup = strawberry.django.field(
+        resolver=get_lineup_by_id)
 
 
 @strawberry.type

@@ -125,6 +125,11 @@ class Lineup:
     game: 'Game'
     team: Team
     players: List['LineupPlayer']
+    opponent: Team
+
+    @strawberry.django.field
+    def opponent(self, info) -> Team:
+        return self.game.away_team if self.team == self.game.home_team else self.game.home_team
 
 
 @strawberry.django.type(models.LineupPlayer)
