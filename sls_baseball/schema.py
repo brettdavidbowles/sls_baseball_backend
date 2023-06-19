@@ -2,7 +2,7 @@ import strawberry
 from typing import List
 from baseball import models
 from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup
-from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput
+from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput, LineupPlayerInput
 from strawberry_django import auth, mutations
 from itertools import islice
 from django.http.request import HttpRequest
@@ -140,6 +140,27 @@ class Mutation:
             name=input.name, league=models.League.objects.get(name=input.league))
         models.Manager.objects.create(team=team, user=request.user)
         return team
+
+    @strawberry.mutation
+    # this works but need a bunch of error handling
+    def update_lineup(
+        self,
+        info,
+        id: strawberry.ID,
+        players: List[LineupPlayerInput]
+    ) -> Lineup:
+        lineup = models.Lineup.objects.get(id=id)
+        lineup.players.all().delete()
+        new_players = []
+        for player in players:
+            new_players.append(models.LineupPlayer(
+                lineup=lineup,
+                player=models.Player.objects.get(id=player.id),
+                position=player.position,
+                batting_order_number=player.batting_order_number
+            ))
+        models.LineupPlayer.objects.bulk_create(new_players)
+        return lineup
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
