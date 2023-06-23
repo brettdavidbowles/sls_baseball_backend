@@ -39,6 +39,14 @@ def get_lineup_by_id(id: str):
     return models.Lineup.objects.get(id=id)
 
 
+def get_bench_by_lineup_id(id: str):
+    lineup = models.Lineup.objects.get(id=id)
+    team = lineup.team
+    lineup_players_ids = models.LineupPlayer.objects.filter(
+        lineup=lineup).values_list("player__id", flat=True)
+    return team.players.exclude(id__in=lineup_players_ids)
+
+
 @strawberry.type
 class Query:
     me: User = auth.current_user()
@@ -58,6 +66,8 @@ class Query:
         resolver=get_player_by_id)
     lineupById: Lineup = strawberry.django.field(
         resolver=get_lineup_by_id)
+    benchByLineupId: List[Player] = strawberry.django.field(
+        resolver=get_bench_by_lineup_id)
 
 
 @strawberry.type
@@ -149,7 +159,12 @@ class Mutation:
         id: strawberry.ID,
         players: List[LineupPlayerInput]
     ) -> Lineup:
+        request: HttpRequest = info.context.request
         lineup = models.Lineup.objects.get(id=id)
+        if not request.user.is_authenticated:
+            raise Exception('User is not authenticated')
+        if not lineup.team.managers.filter(user=request.user).exists():
+            raise Exception('User is not authorized to update this lineup')
         lineup.players.all().delete()
         new_players = []
         for player in players:
