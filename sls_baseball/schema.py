@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup
+from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup, GameFilter
 from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput, LineupPlayerInput
 from strawberry_django import auth, mutations
 from itertools import islice
@@ -33,6 +33,20 @@ def get_player_by_id(id: str):
 
 def get_game_by_id(id: str):
     return models.Game.objects.get(id=id)
+
+
+def get_games_by_user(info):
+    request: HttpRequest = info.context.request
+    if not request.user.is_authenticated:
+        return []
+    print(request.user)
+    print(models.Game.objects.filter(team__managers__user=request.user))
+    print(models.Game.objects.all())
+    home_games = models.Game.objects.filter(
+        home_team__managers__user=request.user)
+    away_games = models.Game.objects.filter(
+        away_team__managers__user=request.user)
+    return (home_games | away_games).order_by("-date_time")
 
 
 def get_lineup_by_id(id: str):
@@ -68,6 +82,8 @@ class Query:
         resolver=get_lineup_by_id)
     benchByLineupId: List[Player] = strawberry.django.field(
         resolver=get_bench_by_lineup_id)
+    gamesByUser: List[Game] = strawberry.django.field(
+        resolver=get_games_by_user)
 
 
 @strawberry.type

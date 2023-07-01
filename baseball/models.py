@@ -96,10 +96,13 @@ class Game(models.Model):
 
     @property
     def is_past(self):
-        return self.date_time < datetime.datetime.now()
+        return self.date_time < datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+        # return True
 
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
+
+    # TODO have to fix all of these to account for traded players
 
     def home_team_total_runs(self):
         return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
