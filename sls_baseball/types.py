@@ -119,6 +119,18 @@ class Game:
     is_past: bool
 
 
+@strawberry.type
+class UserGame:
+    id: str
+    date_time: datetime.datetime
+    home_team: Team
+    away_team: Team
+    league: League
+    season: Season
+    is_past: bool
+    lineup_id: str
+
+
 @strawberry.django.type(models.Lineup)
 class Lineup:
     id: auto
