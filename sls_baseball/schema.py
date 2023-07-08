@@ -35,7 +35,7 @@ def get_game_by_id(id: str):
     return models.Game.objects.get(id=id)
 
 
-def get_games_by_user(info) -> UserGame:
+def get_games_by_user(info):
     request: HttpRequest = info.context.request
     if not request.user.is_authenticated:
         return []
