@@ -1,8 +1,8 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game, User, Team
-from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput
+from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup, GameFilter, UserGame
+from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput, LineupPlayerInput
 from strawberry_django import auth, mutations
 from itertools import islice
 from django.http.request import HttpRequest
@@ -31,6 +31,47 @@ def get_player_by_id(id: str):
     return models.Player.objects.get(id=id)
 
 
+def get_game_by_id(id: str):
+    return models.Game.objects.get(id=id)
+
+
+def get_games_by_user(info):
+    request: HttpRequest = info.context.request
+    if not request.user.is_authenticated:
+        return []
+    home_games = models.Game.objects.filter(
+        home_team__managers__user=request.user)
+    away_games = models.Game.objects.filter(
+        away_team__managers__user=request.user)
+    user_teams = models.Team.objects.filter(managers__user=request.user)
+    user_games = (home_games | away_games).order_by("-date_time")
+    games = [
+        UserGame(
+            id=game.id,
+            date_time=game.date_time,
+            home_team=game.home_team,
+            away_team=game.away_team,
+            league=game.league,
+            season=game.season,
+            is_past=game.is_past,
+            lineup_id=next(
+                (lineup.id for lineup in game.lineups.all() if lineup.team in user_teams), None)
+        ) for game in user_games]
+    return games
+
+
+def get_lineup_by_id(id: str):
+    return models.Lineup.objects.get(id=id)
+
+
+def get_bench_by_lineup_id(id: str):
+    lineup = models.Lineup.objects.get(id=id)
+    team = lineup.team
+    lineup_players_ids = models.LineupPlayer.objects.filter(
+        lineup=lineup).values_list("player__id", flat=True)
+    return team.players.exclude(id__in=lineup_players_ids)
+
+
 @strawberry.type
 class Query:
     me: User = auth.current_user()
@@ -38,13 +79,22 @@ class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
-    gameByPk: Game = strawberry.django.field(pagination=False)
+    gameById: Game = strawberry.django.field(
+        pagination=False,
+        resolver=get_game_by_id
+    )
     teamsByUser: List[Team] = strawberry.django.field(
         resolver=get_team_by_user)
     teamById: Team = strawberry.django.field(
         resolver=get_team_by_id)
     playerById: Player = strawberry.django.field(
         resolver=get_player_by_id)
+    lineupById: Lineup = strawberry.django.field(
+        resolver=get_lineup_by_id)
+    benchByLineupId: List[Player] = strawberry.django.field(
+        resolver=get_bench_by_lineup_id)
+    gamesByUser: List[UserGame] = strawberry.django.field(
+        resolver=get_games_by_user)
 
 
 @strawberry.type
@@ -127,6 +177,32 @@ class Mutation:
             name=input.name, league=models.League.objects.get(name=input.league))
         models.Manager.objects.create(team=team, user=request.user)
         return team
+
+    @strawberry.mutation
+    # this works but need a bunch of error handling
+    def update_lineup(
+        self,
+        info,
+        id: strawberry.ID,
+        players: List[LineupPlayerInput]
+    ) -> Lineup:
+        request: HttpRequest = info.context.request
+        lineup = models.Lineup.objects.get(id=id)
+        if not request.user.is_authenticated:
+            raise Exception('User is not authenticated')
+        if not lineup.team.managers.filter(user=request.user).exists():
+            raise Exception('User is not authorized to update this lineup')
+        lineup.players.all().delete()
+        new_players = []
+        for player in players:
+            new_players.append(models.LineupPlayer(
+                lineup=lineup,
+                player=models.Player.objects.get(id=player.id),
+                position=player.position,
+                batting_order_number=player.batting_order_number
+            ))
+        models.LineupPlayer.objects.bulk_create(new_players)
+        return lineup
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)

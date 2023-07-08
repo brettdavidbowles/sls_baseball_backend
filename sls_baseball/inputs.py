@@ -39,3 +39,10 @@ class LeagueInput:
 class TeamInput:
     name: auto
     league: str
+
+
+@strawberry.django.input(models.LineupPlayer)
+class LineupPlayerInput:
+    id: auto
+    position: auto
+    batting_order_number: auto

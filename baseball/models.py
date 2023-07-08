@@ -5,6 +5,7 @@ from .constants import AT_BAT_OUTCOMES
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .constants import positions
+import datetime
 
 
 class User(AbstractUser):
@@ -93,26 +94,33 @@ class Game(models.Model):
     away_team = models.ForeignKey(
         "Team", on_delete=models.CASCADE, related_name="away_games")
 
+    @property
+    def is_past(self):
+        return self.date_time < datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+        # return True
+
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
 
+    # TODO have to fix all of these to account for traded players
+
     def home_team_total_runs(self):
-        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum']
+        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
 
     def away_team_total_runs(self):
-        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum']
+        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
 
     def home_team_total_hits(self):
-        return self.at_bats.filter(batter__team=self.home_team, outcome__in=AT_BAT_OUTCOMES['hit']).count()
+        return self.at_bats.filter(batter__team=self.home_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
 
     def away_team_total_hits(self):
-        return self.at_bats.filter(batter__team=self.away_team, outcome__in=AT_BAT_OUTCOMES['hit']).count()
+        return self.at_bats.filter(batter__team=self.away_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
 
     def home_team_total_errors(self):
-        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('errors'))['errors__sum']
+        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
     def away_team_total_errors(self):
-        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('errors'))['errors__sum']
+        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
 
 def create_default_lineup(team, game):
