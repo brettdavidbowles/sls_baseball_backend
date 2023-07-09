@@ -192,6 +192,8 @@ class Mutation:
             raise Exception('User is not authenticated')
         if not lineup.team.managers.filter(user=request.user).exists():
             raise Exception('User is not authorized to update this lineup')
+        if lineup.game.is_past:
+            raise Exception('Cannot update lineup for past game')
         lineup.players.all().delete()
         new_players = []
         for player in players:
