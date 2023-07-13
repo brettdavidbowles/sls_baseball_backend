@@ -7,6 +7,7 @@ from strawberry_django import auth, mutations
 from itertools import islice
 from django.http.request import HttpRequest
 from django.contrib.auth import authenticate, login
+from strawberry import relay
 
 
 def get_team_by_user(info):
@@ -76,7 +77,7 @@ def get_bench_by_lineup_id(id: str):
 class Query:
     me: User = auth.current_user()
     auth: User = strawberry.django.field(resolver=get_current_user)
-    players: List[Player] = strawberry.django.field()
+    players: relay.ListConnection[Player] = strawberry.django.connection()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
     gameById: Game = strawberry.django.field(

@@ -1,13 +1,13 @@
 import strawberry
 from baseball import models
 from typing import List
-from strawberry import auto
+from strawberry import auto, relay
 import datetime
 from django.contrib.auth import get_user_model
 
 
 @strawberry.django.type(get_user_model())
-class User:
+class User(relay.Node):
     id: auto
     username: auto
     email: auto
@@ -15,7 +15,7 @@ class User:
 
 
 @strawberry.django.type(models.Player)
-class Player:
+class Player(relay.Node):
     id: auto
     first_name: auto
     last_name: auto
@@ -28,7 +28,7 @@ class Player:
 
 
 @strawberry.django.type(models.PlayerAttribute)
-class PlayerAttribute:
+class PlayerAttribute(relay.Node):
     composure: auto
     endurance: auto
     intellect: auto
@@ -39,7 +39,7 @@ class PlayerAttribute:
 
 
 @strawberry.django.type(models.Team)
-class Team:
+class Team(relay.Node):
     id: auto
     name: auto
     location: auto
@@ -51,13 +51,13 @@ class Team:
 
 
 @strawberry.django.type(models.League)
-class League:
+class League(relay.Node):
     id: auto
     name: auto
 
 
 @strawberry.django.type(models.Manager)
-class Manager:
+class Manager(relay.Node):
     id: auto
     first_name: auto
     last_name: auto
@@ -66,7 +66,7 @@ class Manager:
 
 
 @strawberry.django.type(models.Season)
-class Season:
+class Season(relay.Node):
     id: auto
     name: auto
     start_date: auto
@@ -74,7 +74,7 @@ class Season:
 
 
 @strawberry.django.type(models.HalfInning)
-class HalfInning:
+class HalfInning(relay.Node):
     id: auto
     inning: auto
     at_bats: List['AtBat']
@@ -100,7 +100,7 @@ class GameFilter:
 
 
 @strawberry.django.type(models.Game, pagination=True, filters=GameFilter)
-class Game:
+class Game(relay.Node):
     id: auto
     date_time: auto
     home_team: Team
@@ -132,7 +132,7 @@ class UserGame:
 
 
 @strawberry.django.type(models.Lineup)
-class Lineup:
+class Lineup(relay.Node):
     id: auto
     game: 'Game'
     team: Team
@@ -144,7 +144,7 @@ class Lineup:
 
 
 @strawberry.django.type(models.LineupPlayer)
-class LineupPlayer:
+class LineupPlayer(relay.Node):
     id: auto
     lineup: Lineup
     player: Player
@@ -153,7 +153,7 @@ class LineupPlayer:
 
 
 @strawberry.django.type(models.AtBat)
-class AtBat:
+class AtBat(relay.Node):
     id: auto
     pitcher: Player
     batter: Player
@@ -169,7 +169,7 @@ class AtBat:
 
 
 @strawberry.django.type(models.LeftOnRunner)
-class LeftOnRunner:
+class LeftOnRunner(relay.Node):
     id: auto
     player: Player
     base: auto
