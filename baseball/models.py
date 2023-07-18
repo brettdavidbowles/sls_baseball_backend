@@ -206,7 +206,15 @@ class LineupPlayer(models.Model):
     batting_order_number = models.IntegerField()
 
     def __str__(self):
-        return f"{self.batting_order_number} in {self.lineup.team.name} lineup for Game {self.lineup.game.id}"
+        return f"{self.player.last_name}, {self.batting_order_number} in {self.lineup.team.name} lineup for Game {self.lineup.game.id}"
+
+
+def get_default_lineup_player(game, player):
+    return LineupPlayer.objects.get(lineup__game=game, player=player)
+
+
+def create_dummy_lineup_player():
+    return LineupPlayer.objects.create(lineup_id=1, player_id=1, position="P", batting_order_number=1)
 
 
 class AtBat(models.Model):
@@ -224,6 +232,10 @@ class AtBat(models.Model):
     outcome = models.CharField(max_length=50)
     game_at_bat_number = models.IntegerField()
     errors = models.IntegerField(default=0)
+    lineup_batter = models.ForeignKey(
+        "LineupPlayer", on_delete=models.RESTRICT, related_name="at_bats", null=True, default=None)
+    lineup_pitcher = models.ForeignKey(
+        "LineupPlayer", on_delete=models.RESTRICT, related_name="pitched_at_bats", null=True, default=None)
 
     def __str__(self):
         return f"At bat {self.game_at_bat_number} in Game {self.game.id}"
