@@ -102,25 +102,23 @@ class Game(models.Model):
     def __str__(self):
         return f"Game {self.id} on {self.date_time}"
 
-    # TODO have to fix all of these to account for traded players
-
     def home_team_total_runs(self):
-        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
+        return self.at_bats.filter(batter__lineup__team=self.home_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
 
     def away_team_total_runs(self):
-        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
+        return self.at_bats.filter(batter__lineup__team=self.away_team).aggregate(Sum('rbis'))['rbis__sum'] or 0
 
     def home_team_total_hits(self):
-        return self.at_bats.filter(batter__team=self.home_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
+        return self.at_bats.filter(batter__lineup__team=self.home_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
 
     def away_team_total_hits(self):
-        return self.at_bats.filter(batter__team=self.away_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
+        return self.at_bats.filter(batter__lineup__team=self.away_team, outcome__in=AT_BAT_OUTCOMES['hit']).count() or 0
 
     def home_team_total_errors(self):
-        return self.at_bats.filter(batter__team=self.home_team).aggregate(Sum('errors'))['errors__sum'] or 0
+        return self.at_bats.filter(batter__lineup__team=self.home_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
     def away_team_total_errors(self):
-        return self.at_bats.filter(batter__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
+        return self.at_bats.filter(batter__lineup__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
 
 def create_default_lineup(team, game):
@@ -220,10 +218,10 @@ def create_dummy_lineup_player():
 class AtBat(models.Model):
     game = models.ForeignKey(
         "Game", on_delete=models.CASCADE, related_name="at_bats")
-    pitcher = models.ForeignKey(
-        "Player", on_delete=models.RESTRICT, related_name="pitched_at_bats")
-    batter = models.ForeignKey(
-        "Player", on_delete=models.RESTRICT, related_name="batted_at_bats")
+    # pitcher = models.ForeignKey(
+    #     "Player", on_delete=models.RESTRICT, related_name="pitched_at_bats")
+    # batter = models.ForeignKey(
+    #     "Player", on_delete=models.RESTRICT, related_name="batted_at_bats")
     half_inning = models.ForeignKey(
         "HalfInning", on_delete=models.CASCADE, related_name="at_bats")
     strikes = models.IntegerField()
@@ -232,9 +230,9 @@ class AtBat(models.Model):
     outcome = models.CharField(max_length=50)
     game_at_bat_number = models.IntegerField()
     errors = models.IntegerField(default=0)
-    lineup_batter = models.ForeignKey(
+    batter = models.ForeignKey(
         "LineupPlayer", on_delete=models.RESTRICT, related_name="at_bats", null=True, default=None)
-    lineup_pitcher = models.ForeignKey(
+    pitcher = models.ForeignKey(
         "LineupPlayer", on_delete=models.RESTRICT, related_name="pitched_at_bats", null=True, default=None)
 
     def __str__(self):
