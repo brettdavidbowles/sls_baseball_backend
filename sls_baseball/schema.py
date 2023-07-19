@@ -79,6 +79,7 @@ class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
+    teams: List[Team] = strawberry.django.field()
     gameById: Game = strawberry.django.field(
         pagination=False,
         resolver=get_game_by_id

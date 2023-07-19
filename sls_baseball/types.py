@@ -48,6 +48,10 @@ class Team:
     games: List['Game']
     managers: List['Manager']
     players: List[Player]
+    home_games: List['Game']
+    away_games: List['Game']
+    record: str
+    # record_per_season: List['Season']
 
 
 @strawberry.django.type(models.League)
@@ -117,6 +121,7 @@ class Game:
     home_team_total_errors: int
     away_team_total_errors: int
     is_past: bool
+    winning_team: Team
 
 
 @strawberry.type

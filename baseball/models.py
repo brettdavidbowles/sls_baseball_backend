@@ -46,10 +46,22 @@ class Team(models.Model):
     stadium = models.CharField(max_length=50, blank=True, null=True)
     league = models.ForeignKey(
         "League", on_delete=models.SET_NULL, related_name="teams", null=True)
-    games = models.ManyToManyField("Game", blank=True)
+    # games = models.ManyToManyField("Game", blank=True)
 
     def __str__(self):
         return f"{self.name}"
+
+    @property
+    def record(self):
+        games = self.home_games.all() | self.away_games.all()
+        wins = 0
+        losses = 0
+        for game in games:
+            if ((game.at_bats.filter(batter__lineup__team=self).aggregate(Sum('rbis'))['rbis__sum'] or 0) > (game.at_bats.exclude(batter__lineup__team=self).aggregate(Sum('rbis'))['rbis__sum'] or 0)):
+                wins += 1
+            else:
+                losses += 1
+        return f"{wins}-{losses}"
 
 
 class League(models.Model):
@@ -119,6 +131,12 @@ class Game(models.Model):
 
     def away_team_total_errors(self):
         return self.at_bats.filter(batter__lineup__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
+
+    def winning_team(self):
+        if self.home_team_total_runs() > self.away_team_total_runs():
+            return self.home_team
+        else:
+            return self.away_team
 
 
 def create_default_lineup(team, game):
