@@ -72,10 +72,6 @@ def get_bench_by_lineup_id(id: str):
     return team.players.exclude(id__in=lineup_players_ids)
 
 
-def get_games():
-    return models.Game.objects.all()
-
-
 @strawberry.type
 class Query:
     me: User = auth.current_user()
@@ -83,9 +79,7 @@ class Query:
     players: List[Player] = strawberry.django.field()
     leagues: List[League] = strawberry.django.field()
     teams: List[Team] = strawberry.django.field()
-    games: List[Game] = strawberry.django.field(
-        resolver=get_games
-    )
+    games: List[Game] = strawberry.django.field()
     gameById: Game = strawberry.django.field(
         pagination=False,
         resolver=get_game_by_id

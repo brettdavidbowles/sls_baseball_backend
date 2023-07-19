@@ -132,14 +132,13 @@ class Game(models.Model):
     def away_team_total_errors(self):
         return self.at_bats.filter(batter__lineup__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
-    @property
-    def winning_team(self):
-        if self.home_team_total_runs() > self.away_team_total_runs():
-            return self.home_team
-        elif self.home_team_total_runs() < self.away_team_total_runs():
-            return self.away_team
-        else:
-            return None
+    # def winning_team(self):
+    #     if self.home_team_total_runs() > self.away_team_total_runs():
+    #         return self.home_team
+    #     elif self.home_team_total_runs() < self.away_team_total_runs():
+    #         return self.away_team
+    #     else:
+    #         return None
 
 
 def create_default_lineup(team, game):

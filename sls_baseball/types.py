@@ -121,7 +121,10 @@ class Game:
     home_team_total_errors: int
     away_team_total_errors: int
     is_past: bool
-    winning_team: Team
+
+    # @strawberry.django.field
+    # def winning_team(self, info) -> Team or None:
+    #     return self.winning_team or None
 
 
 @strawberry.type
