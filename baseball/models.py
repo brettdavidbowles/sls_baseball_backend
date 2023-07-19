@@ -136,8 +136,10 @@ class Game(models.Model):
     def winning_team(self):
         if self.home_team_total_runs() > self.away_team_total_runs():
             return self.home_team
-        else:
+        elif self.home_team_total_runs() < self.away_team_total_runs():
             return self.away_team
+        else:
+            return None
 
 
 def create_default_lineup(team, game):
