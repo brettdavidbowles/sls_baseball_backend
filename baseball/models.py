@@ -40,6 +40,14 @@ class PlayerAttribute(models.Model):
         return f"{self.player.first_name} {self.player.last_name} Attributes"
 
 
+class SeasonRecord:
+    def __init__(self, season_name, wins, losses, average):
+        self.season_name = season_name
+        self.wins = wins
+        self.losses = losses
+        self.average = average
+
+
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
     location = models.CharField(max_length=50, blank=True, null=True)
@@ -62,6 +70,25 @@ class Team(models.Model):
             else:
                 losses += 1
         return f"{wins}-{losses}"
+
+    @property
+    def record_per_season(self):
+        seasons = Season.objects.all()
+        records = []
+        for season in seasons:
+            games = self.home_games.filter(
+                season=season) | self.away_games.filter(season=season)
+            wins = 0
+            losses = 0
+            for game in games:
+                if ((game.at_bats.filter(batter__lineup__team=self).aggregate(Sum('rbis'))['rbis__sum'] or 0) > (game.at_bats.exclude(batter__lineup__team=self).aggregate(Sum('rbis'))['rbis__sum'] or 0)):
+                    wins += 1
+                else:
+                    losses += 1
+            average = wins / (wins + losses)
+            season_record = SeasonRecord(season.name, wins, losses, average)
+            records.append(season_record)
+        return records
 
 
 class League(models.Model):
@@ -86,6 +113,15 @@ class Manager(models.Model):
             return f"{self.team.name} Manager {self.id}"
 
 
+class SeasonRanking:
+    def __init__(self, team, average, rank, wins, losses):
+        self.team = team
+        self.average = average
+        self.rank = rank
+        self.wins = wins
+        self.losses = losses
+
+
 class Season(models.Model):
     name = models.CharField(max_length=50)
     start_date = models.DateField()
@@ -93,6 +129,43 @@ class Season(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @property
+    def rankings(self):
+        games = self.games.all()
+        teams = []
+        for game in games:
+            teams.append(game.home_team)
+            teams.append(game.away_team)
+        teams = list(set(teams))
+        print(teams)
+        team_averages = []
+        averages = []
+        ranking_list = []
+        for team in teams:
+            games = team.home_games.filter(
+                season=self) | team.away_games.filter(season=self)
+            wins = 0
+            losses = 0
+            for game in games:
+                if ((game.at_bats.filter(batter__lineup__team=team).aggregate(Sum('rbis'))['rbis__sum'] or 0) > (game.at_bats.exclude(batter__lineup__team=team).aggregate(Sum('rbis'))['rbis__sum'] or 0)):
+                    wins += 1
+                else:
+                    losses += 1
+            if wins + losses == 0:
+                average = 0
+            else:
+                average = wins / (wins + losses)
+            team_averages.append((team, average, wins, losses))
+            averages.append(average)
+        averages = list(set(averages))
+        averages.sort(reverse=True)
+        for team in team_averages:
+            rank = averages.index(team[1]) + 1
+            ranking = SeasonRanking(team[0], team[1], rank, team[2], team[3])
+            ranking_list.append(ranking)
+
+        return ranking_list
 
 
 class Game(models.Model):
@@ -132,13 +205,13 @@ class Game(models.Model):
     def away_team_total_errors(self):
         return self.at_bats.filter(batter__lineup__team=self.away_team).aggregate(Sum('errors'))['errors__sum'] or 0
 
-    # def winning_team(self):
-    #     if self.home_team_total_runs() > self.away_team_total_runs():
-    #         return self.home_team
-    #     elif self.home_team_total_runs() < self.away_team_total_runs():
-    #         return self.away_team
-    #     else:
-    #         return None
+    def winning_team(self):
+        if self.home_team_total_runs() > self.away_team_total_runs():
+            return self.home_team
+        elif self.home_team_total_runs() < self.away_team_total_runs():
+            return self.away_team
+        else:
+            return None
 
 
 def create_default_lineup(team, game):

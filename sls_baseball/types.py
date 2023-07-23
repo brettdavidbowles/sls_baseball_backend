@@ -1,6 +1,6 @@
 import strawberry
 from baseball import models
-from typing import List
+from typing import List, Optional
 from strawberry import auto
 import datetime
 from django.contrib.auth import get_user_model
@@ -38,6 +38,14 @@ class PlayerAttribute:
     willpower: auto
 
 
+@strawberry.type
+class SeasonRecord:
+    season_name: str
+    wins: int
+    losses: int
+    average: float
+
+
 @strawberry.django.type(models.Team)
 class Team:
     id: auto
@@ -51,7 +59,7 @@ class Team:
     home_games: List['Game']
     away_games: List['Game']
     record: str
-    # record_per_season: List['Season']
+    record_per_season: List[SeasonRecord]
 
 
 @strawberry.django.type(models.League)
@@ -69,12 +77,22 @@ class Manager:
     user: User
 
 
+@strawberry.type
+class SeasonRanking:
+    team: 'Team'
+    average: float
+    rank: int
+    wins: int
+    losses: int
+
+
 @strawberry.django.type(models.Season)
 class Season:
     id: auto
     name: auto
     start_date: auto
     end_date: auto
+    rankings: List[SeasonRanking]
 
 
 @strawberry.django.type(models.HalfInning)
@@ -121,10 +139,7 @@ class Game:
     home_team_total_errors: int
     away_team_total_errors: int
     is_past: bool
-
-    # @strawberry.django.field
-    # def winning_team(self, info) -> Team or None:
-    #     return self.winning_team or None
+    winning_team: Optional[Team]
 
 
 @strawberry.type

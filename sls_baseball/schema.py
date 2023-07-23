@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 from baseball import models
-from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup, GameFilter, UserGame
+from .types import Player, League, PlayerAttribute, Game, User, Team, Lineup, GameFilter, UserGame, Season
 from .inputs import PlayerInput, LeagueInput, UserInput, TeamInput, LineupPlayerInput
 from strawberry_django import auth, mutations
 from itertools import islice
@@ -80,6 +80,7 @@ class Query:
     leagues: List[League] = strawberry.django.field()
     teams: List[Team] = strawberry.django.field()
     games: List[Game] = strawberry.django.field()
+    seasons: List[Season] = strawberry.django.field()
     gameById: Game = strawberry.django.field(
         pagination=False,
         resolver=get_game_by_id
