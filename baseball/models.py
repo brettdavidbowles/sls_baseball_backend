@@ -85,7 +85,10 @@ class Team(models.Model):
                     wins += 1
                 else:
                     losses += 1
-            average = wins / (wins + losses)
+            if (wins + losses) == 0:
+                average = 0
+            else:
+                average = wins / (wins + losses)
             season_record = SeasonRecord(season.name, wins, losses, average)
             records.append(season_record)
         return records
