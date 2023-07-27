@@ -146,8 +146,8 @@ class Season(models.Model):
         averages = []
         ranking_list = []
         for team in teams:
-            games = team.home_games.filter(
-                season=self) | team.away_games.filter(season=self)
+            games = team.home_games.filter(season=self, date_time__lt=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)) | team.away_games.filter(
+                season=self, date_time__lt=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc))
             wins = 0
             losses = 0
             for game in games:
