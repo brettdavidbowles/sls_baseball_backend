@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if env('ENVIRONMENT') == 'production':
-    DEBUG = False
+    DEBUG = True
     # ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203']
     # CSRF_TRUSTED_ORIGINS = ['baseballsimulator.online',
     #                         'www.baseballsimulator.online']
@@ -175,6 +175,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'checkstatic/static/')
+]
 # if env('ENVIRONMENT') == 'production':
 #     STATIC_ROOT = env('STATIC_ROOT')
 #     STATICFILES_DIRS = [BASE_DIR / "static"]
