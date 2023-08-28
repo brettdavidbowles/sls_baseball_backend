@@ -14,6 +14,8 @@ from pathlib import Path
 import environ
 import json
 import os
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 env = environ.Env()
 environ.Env.read_env()
