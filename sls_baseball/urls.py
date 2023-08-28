@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from strawberry.django.views import GraphQLView
 from .schema import schema
+from django.conf import settings
+from django.conf.urls.static import static
 # from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -25,4 +27,4 @@ urlpatterns = [
     # path('accounts/', include('django.contrib.auth.urls')),
     # path('login/', auth_views.LoginView.as_view(), name='login'),
     # path('password-reset', auth_views.PasswordResetView.as_view(), name='password_reset'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
