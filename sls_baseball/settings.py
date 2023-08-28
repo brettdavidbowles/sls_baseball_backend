@@ -14,8 +14,8 @@ from pathlib import Path
 import environ
 import json
 import os
-# import mimetypes
-# mimetypes.add_type("text/css", ".css", True)
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 
 env = environ.Env()
 environ.Env.read_env()
@@ -180,7 +180,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "staticfiles")]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # if env('ENVIRONMENT') == 'production':
 #     STATIC_ROOT = env('STATIC_ROOT')
