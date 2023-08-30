@@ -38,7 +38,7 @@ if env('ENVIRONMENT') == 'production':
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
-                            'https://sls-baseball-frontend-bju6y3472-brettdavidbowles.vercel.app']
+                            'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app/']
     # CSRF_COOKIE_DOMAIN = 'baseballsimulator.online'
     # SESSION_COOKIE_SECURE = True
     # CORS_ALLOW_CREDENTIALS = True
@@ -51,7 +51,7 @@ if env('ENVIRONMENT') == 'development':
     ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203', 'localhost']
     CSRF_TRUSTED_ORIGINS = [
         'https://baseballsimulator.online', 'http://localhost:3000',
-        'https://sls-baseball-frontend-bju6y3472-brettdavidbowles.vercel.app']
+        'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app/']
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
@@ -90,7 +90,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://baseballsimulator.online",
     "https://slsbaseballbackend-production.up.railway.app",
-    "https://sls-baseball-frontend-bju6y3472-brettdavidbowles.vercel.app"
+    "https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app/"
 ]
 
 ROOT_URLCONF = 'sls_baseball.urls'
