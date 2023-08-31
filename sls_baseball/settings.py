@@ -38,28 +38,29 @@ if env('ENVIRONMENT') == 'production':
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
-                            'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app',
-                            'http://localhost:3000']
-    CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
-    SESSION_COOKIE_SECURE = True
+                            'https://sls-baseball-frontend.vercel.app/',
+                            ]
+    # CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
+    # SESSION_COOKIE_SECURE = True
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
         "https://www.baseballsimulator.online",
-        'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app',
-        'http://localhost:3000'
+        'https://sls-baseball-frontend.vercel.app/',
     ]
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
-    ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203', 'localhost']
+    ALLOWED_HOSTS = ['baseballsimulator.online',
+                     '3.129.154.203', 'localhost']
     CSRF_TRUSTED_ORIGINS = [
-        'https://baseballsimulator.online', 'http://localhost:3000',
-        'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app/']
+        'https://baseballsimulator.online',
+        # 'http://localhost:3000',
+        'https://sls-baseball-frontend.vercel.app//']
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
         "https://www.baseballsimulator.online",
-        "http://localhost:3000"
+        # "http://localhost:3000"
     ]
 
 
@@ -93,7 +94,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://baseballsimulator.online",
     "https://slsbaseballbackend-production.up.railway.app",
-    "https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app"
+    "https://sls-baseball-frontend.vercel.app/"
 ]
 
 ROOT_URLCONF = 'sls_baseball.urls'
