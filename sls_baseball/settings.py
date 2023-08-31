@@ -35,6 +35,8 @@ if env('ENVIRONMENT') == 'production':
     DEBUG = False
     ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203',
                      'slsbaseballbackend-production.up.railway.app']
+    SESSION_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SAMESITE = 'None'
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
@@ -42,8 +44,6 @@ if env('ENVIRONMENT') == 'production':
                             ]
     # CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
     # SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = None
-    CSRF_COOKIE_SAMESITE = None
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
