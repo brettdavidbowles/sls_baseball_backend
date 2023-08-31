@@ -42,6 +42,8 @@ if env('ENVIRONMENT') == 'production':
                             ]
     # CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
     # SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = None
+    CSRF_COOKIE_SAMESITE = None
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
