@@ -89,8 +89,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://baseballsimulator.online",
-    "https://slsbaseballbackend-production.up.railway.app",
-    "https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app/"
+    "https://slsbaseballbackend-production.up.railway.app"
 ]
 
 ROOT_URLCONF = 'sls_baseball.urls'
