@@ -32,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if env('ENVIRONMENT') == 'production':
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203',
                      'slsbaseballbackend-production.up.railway.app']
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
