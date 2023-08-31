@@ -38,7 +38,7 @@ if env('ENVIRONMENT') == 'production':
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
-                            'https://sls-baseball-frontend.vercel.app/',
+                            'https://sls-baseball-frontend.vercel.app',
                             ]
     # CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
     # SESSION_COOKIE_SECURE = True
@@ -46,7 +46,7 @@ if env('ENVIRONMENT') == 'production':
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
         "https://www.baseballsimulator.online",
-        'https://sls-baseball-frontend.vercel.app/',
+        'https://sls-baseball-frontend.vercel.app',
     ]
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
@@ -55,7 +55,7 @@ if env('ENVIRONMENT') == 'development':
     CSRF_TRUSTED_ORIGINS = [
         'https://baseballsimulator.online',
         # 'http://localhost:3000',
-        'https://sls-baseball-frontend.vercel.app//']
+        'https://sls-baseball-frontend.vercel.app']
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
@@ -94,7 +94,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://baseballsimulator.online",
     "https://slsbaseballbackend-production.up.railway.app",
-    "https://sls-baseball-frontend.vercel.app/"
+    "https://sls-baseball-frontend.vercel.app"
 ]
 
 ROOT_URLCONF = 'sls_baseball.urls'
