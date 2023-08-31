@@ -38,14 +38,16 @@ if env('ENVIRONMENT') == 'production':
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
-                            'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app']
+                            'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app',
+                            'http://localhost:3000']
     # CSRF_COOKIE_DOMAIN = 'baseballsimulator.online'
     # SESSION_COOKIE_SECURE = True
     CORS_ALLOW_CREDENTIALS = True
     CORS_ORIGIN_WHITELIST = [
         "https://baseballsimulator.online",
         "https://www.baseballsimulator.online",
-        'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app'
+        'https://sls-baseball-frontend-67gdcpahu-brettdavidbowles.vercel.app',
+        'http://localhost:3000'
     ]
 if env('ENVIRONMENT') == 'development':
     DEBUG = True
