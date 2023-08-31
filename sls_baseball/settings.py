@@ -34,7 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 if env('ENVIRONMENT') == 'production':
     DEBUG = False
     ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203',
-                     'slsbaseballbackend-production.up.railway.app']
+                     'slsbaseballbackend-production.up.railway.app', 'localhost']
     CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                             'https://www.baseballsimulator.online',
                             'https://slsbaseballbackend-production.up.railway.app',
