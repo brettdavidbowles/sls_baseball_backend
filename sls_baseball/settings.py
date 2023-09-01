@@ -49,12 +49,13 @@ ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203',
 #                         ]
 # CSRF_COOKIE_DOMAIN = 'https://slsbaseballbackend-production.up.railway.app'
 # SESSION_COOKIE_SECURE = True
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ORIGIN_WHITELIST = [
-#     "https://baseballsimulator.online",
-#     "https://www.baseballsimulator.online",
-#     'https://sls-baseball-frontend.vercel.app',
-# ]
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    #     "https://baseballsimulator.online",
+    #     "https://www.baseballsimulator.online",
+    'https://sls-baseball-frontend.vercel.app',
+]
 # if env('ENVIRONMENT') == 'development':
 #     DEBUG = True
 #     ALLOWED_HOSTS = ['baseballsimulator.online',
