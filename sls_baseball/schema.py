@@ -18,6 +18,7 @@ def get_team_by_user(info):
 
 def get_current_user(info):
     request: HttpRequest = info.context.request
+    print(request)
     if not request.user.is_authenticated:
         return User(id="", username="", email="", managers=[])
     return request.user
