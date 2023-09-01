@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['baseballsimulator.online', '3.129.154.203',
                  ]
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_DOMAIN = 'https://sls-baseball-frontend.vercel.app'
 CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                         'https://www.baseballsimulator.online',
                         'https://slsbaseballbackend-production.up.railway.app',
