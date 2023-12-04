@@ -33,8 +33,8 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 # if env('ENVIRONMENT') == 'production':
 DEBUG = True
-ALLOWED_HOSTS = ['https://baseballsimulator.online',
-                 'https://slsbaseballbackend-production.up.railway.app',
+ALLOWED_HOSTS = ['baseballsimulator.online',
+                 'slsbaseballbackend-production.up.railway.app',
                  'https://sls-baseball-frontend.vercel.app'
                  ]
 # CSRF_COOKIE_SECURE = True
@@ -52,7 +52,7 @@ CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    "https://baseballsimulator.online",
+    #     "https://baseballsimulator.online",
     #     "https://www.baseballsimulator.online",
     'https://sls-baseball-frontend.vercel.app',
 ]
