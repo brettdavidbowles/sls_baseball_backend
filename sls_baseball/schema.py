@@ -18,7 +18,6 @@ def get_team_by_user(info):
 
 def get_current_user(info):
     request: HttpRequest = info.context.request
-    print(request.user)
     if not request.user.is_authenticated:
         print('no user')
         return User(id="", username="", email="", managers=[])
@@ -120,6 +119,8 @@ class Mutation:
             request, username=username.lower(), password=password)
         if user is not None:
             login(request, user)
+            print(request)
+            print(user)
             return user
         else:
             return User(id="", username="", email="")

@@ -36,11 +36,12 @@ DEBUG = True
 ALLOWED_HOSTS = ['baseballsimulator.online',
                  'slsbaseballbackend-production.up.railway.app',
                  'https://sls-baseball-frontend.vercel.app',
+                 'localhost'
                  ]
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_SAMESITE = 'None'
 # CSRF_COOKIE_DOMAIN = 'https://sls-baseball-frontend.vercel.app'
 CSRF_TRUSTED_ORIGINS = ['https://baseballsimulator.online',
                         'https://www.baseballsimulator.online',
