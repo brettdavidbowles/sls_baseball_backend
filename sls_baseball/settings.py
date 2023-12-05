@@ -35,7 +35,8 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = True
 ALLOWED_HOSTS = ['baseballsimulator.online',
                  'slsbaseballbackend-production.up.railway.app',
-                 'https://sls-baseball-frontend.vercel.app'
+                 'https://sls-baseball-frontend.vercel.app',
+                 'localhost',
                  ]
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True

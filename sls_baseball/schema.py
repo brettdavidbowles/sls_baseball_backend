@@ -18,7 +18,8 @@ def get_team_by_user(info):
 
 def get_current_user(info):
     request: HttpRequest = info.context.request
-    print(request.user)
+    print(request.COOKIES.get('sessionid'))
+    print(request.COOKIES.get('csrftoken'))
     if not request.user.is_authenticated:
         print('no user')
         return User(id="", username="", email="", managers=[])
