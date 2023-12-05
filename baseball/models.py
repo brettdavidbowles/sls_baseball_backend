@@ -141,7 +141,6 @@ class Season(models.Model):
             teams.append(game.home_team)
             teams.append(game.away_team)
         teams = list(set(teams))
-        print(teams)
         team_averages = []
         averages = []
         ranking_list = []
